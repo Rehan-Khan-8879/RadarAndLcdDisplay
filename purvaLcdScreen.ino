@@ -4,13 +4,14 @@
 
 LiquidCrystal_I2C lcd(0x27, 16, 2);
 
-SoftwareSerial BT(10, 11);   // Arduino RX, TX
+SoftwareSerial BT(10, 11);   // we use arduino pin 10 RX and 11 as TX
 
 String message = "";
 String currentMessage = "";
 
 unsigned long lastReceive = 0;
 
+// setup
 void setup() {
 
   Serial.begin(9600);
@@ -26,13 +27,12 @@ void setup() {
   lcd.clear();
 }
 
+
+//    Loop code
 void loop() {
 
-  // -----------------------------
-  // Check for new Bluetooth data
-  // -----------------------------
 
-  while (BT.available()) {
+  while (BT.available()) { //cheack for bluetooth
 
     char c = BT.read();
 
@@ -44,9 +44,7 @@ void loop() {
   }
 
 
-  // -----------------------------
-  // New message received
-  // -----------------------------
+
 
   if (message.length() > 0 &&
       millis() - lastReceive > 500) {
@@ -61,9 +59,7 @@ void loop() {
   }
 
 
-  // -----------------------------
-  // Keep scrolling current message
-  // -----------------------------
+
 
   if (currentMessage.length() > 0) {
 
@@ -72,10 +68,8 @@ void loop() {
 }
 
 
-// ==========================================
-// SCROLL MESSAGE
-// ==========================================
 
+// defined function for scrolling message to left
 void scrollMessage(String text) {
 
   String scrollText = "                ";
@@ -88,10 +82,7 @@ void scrollMessage(String text) {
   // Scroll from right to left
   for (int i = 0; i <= totalLength - 16; i++) {
 
-    // --------------------------------
-    // Check if a NEW Bluetooth message
-    // has arrived
-    // --------------------------------
+
 
     if (BT.available()) {
       return;
@@ -106,6 +97,5 @@ void scrollMessage(String text) {
     delay(300);
   }
 
-  // Function finishes and loop()
-  // starts it again automatically
+
 }
